@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 
 const Card = styled.div`
     width: 400px;
-    height: 520px;
+    height: 510px;
     padding: 2rem;
     background-color: #ffffff;
     box-shadow: 1px 1px 20px 0px #b5c4f74d;
@@ -17,11 +17,13 @@ const Card = styled.div`
 function PaymentCard() {
     const stripe = useStripe();
     const elements = useElements();
+    const [disabled, setdisabled] = useState(false)
 
     const handleSubmit = async (e) => {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         e.preventDefault();
+        setdisabled(false)
         const data = new FormData(e.currentTarget);
 
         let email = data.get('email')
@@ -43,8 +45,8 @@ function PaymentCard() {
             body: JSON.stringify({
                 amount: parseInt(amount) * 100,
             }),
-        }).then(res => res.json())
-
+        }).then(res => res.json()).catch(err => console.log(err))
+        if(!clientSecret) alert("something went make sure you connected to internet")
 
         const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
             clientSecret,
@@ -69,25 +71,27 @@ function PaymentCard() {
     return (
         <Card>
             <form action="" onSubmit={handleSubmit} >
-                <h3 style={{ textAlign: "center", marginBottom: "50px" }} >VALYKA PAYMENT PORTAL</h3>
+                <h3 style={{ textAlign: "center", marginBottom: "30px" }} >VALYKA PAYMENT PORTAL</h3>
                 <label style={{ fontWeight: "bold", marginBottom: 2 }} htmlFor="email">Email Address</label>
                 <Input type="email" name="email" id="email" />
                 <br />
                 <label style={{ fontWeight: "bold", marginBottom: 2 }} htmlFor="phone">Phone Number</label>
-                <Input type="email" name="email" id="phone" />
+                <Input type="text" name="phone" id="phone" />
                 <br />
                 <label style={{ fontWeight: "bold", marginBottom: 2 }} htmlFor="amount">Amount</label>
                 <Input type="amount" name="amount" id="amount" />
-                <label style={{ fontWeight: "bold", marginBottom: 2 }} htmlFor="card">Card Details</label>
+                <label style={{ fontWeight: "bold", marginBottom: 5 }} htmlFor="card">Card Details</label>
                 <div style={{
-                    height: "30px",
-                    paddingTop: "10px",
+                    height: "35px",
+                    marginTop: "7px",
+                    padding: "12px 10px",
+                    borderRadius: "5px",
                     backgroundColor: "#f7eef7"
                 }} >
                     <CardElement o id='card' />
                 </div>
 
-                <Pay type="submit">Pay</Pay>
+                <Pay disabled={disabled} type="submit">Pay</Pay>
 
             </form>
         </Card>
@@ -102,24 +106,34 @@ const Pay = styled.button`
     border-style:none;
     border-radius: 4px;
     width: 100%;
-    height:30px;
+    height:38px;
     font-size:18px;
-    margin-top: 12px;
-   :hover:{
-    background-color: #f3d5f3;
-   }
+    margin-top: 20px;
+    &:hover {
+        transition-delay:100ms;
+        transition-duration:300ms;
+        background-color: #68026b;
+    };
+    :active{
+        width: 99.9%;
+    height:37/9px;
+        background-color: #0f040f;
+
+    }
 
 `
 const Input = styled.input`
     background-color: #f7eef7;
     border-style:none;
     border-radius: 4px;
+    padding: 6px 7px;
     width: 100%;
     height:30px;
-    font-size:24px;
+    font-size:18px;
     margin:1rem auto;
-   :hover:{
-    background-color: #f3d5f3;
-   }
+    &:focus-visible{
+        border-style:none;
+        outline: none;
+    }
 
 `

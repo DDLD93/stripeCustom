@@ -5,7 +5,7 @@ const stripeCTRL = new Stripe("sk_test_51JW2AbE8Ae2Mwo9GA97HpTwWjmbgnir2gLdcqp27
 
 export default async function handler(req, res) {
 if(req.method !== "POST"){
-  req.status(400).json({message:'invalid request type'})
+  res.status(400).json({message:'invalid request type'})
 }
 
    let {amount}= req.body
