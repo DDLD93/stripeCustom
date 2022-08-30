@@ -21,7 +21,7 @@ const DarkBackground = styled.div`
 
 
 export default function Home() {
- const stripePromise = loadStripe('pk_test_51JW2AbE8Ae2Mwo9G2u5DX0rwlFZVyQGDanFTdU9yWc1cUw2Tt5SaCxbAMLY7HO9sucMmJBKcs9MFPXIMXk5gxhbJ00kCf66Lzh');
+ const stripePromise = loadStripe('pk_live_51KOKIRKY8d3kVyC69pFX9HNmQW1HdvoVSPyw0iv14OFHSuCfi38IoVMD0LjNainSfDQ9PBVxSObnuRFSTBPQmrqW00D444frpP');
   return (
     <div className={styles.container}>
       <Head>

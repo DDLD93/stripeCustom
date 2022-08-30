@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-const stripeCTRL = new Stripe("sk_test_51JW2AbE8Ae2Mwo9GA97HpTwWjmbgnir2gLdcqp27KbK4mlX7XtFffXKks4210BHE68lYz04CtlhmN0LOWtnny1jB00SmEJybjE",{
+const stripeCTRL = new Stripe("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",{
   apiVersion: "2022-08-01",
 })
 
