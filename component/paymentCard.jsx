@@ -35,7 +35,7 @@ function PaymentCard() {
             alert('Stripe.js has not yet loaded.');
             return;
         }
-        const { clientSecret } = await fetch("http://localhost:3000/api", {
+        const { clientSecret } = await fetch("/api", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
