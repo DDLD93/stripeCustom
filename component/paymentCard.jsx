@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import styled from 'styled-components';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+
+
 
 
 const Card = styled.div`
@@ -23,7 +27,7 @@ function PaymentCard() {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         e.preventDefault();
-        setdisabled(false)
+        setdisabled(true)
         const data = new FormData(e.currentTarget);
 
         let email = data.get('email')
@@ -34,6 +38,7 @@ function PaymentCard() {
         if (!stripe || !elements) {
             // Stripe.js has not yet loaded.
             // Make sure to disable form submission until Stripe.js has loaded.
+            setdisabled(false)
             alert('Stripe.js has not yet loaded.');
             return;
         }
@@ -46,7 +51,11 @@ function PaymentCard() {
                 amount: parseInt(amount) * 100,
             }),
         }).then(res => res.json()).catch(err => console.log(err))
-        if(!clientSecret) alert("something went make sure you connected to internet")
+        if (!clientSecret)  {
+            alert("something went make sure you connected to internet");
+            setdisabled(false)
+            return
+        }
 
         const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
             clientSecret,
@@ -63,15 +72,21 @@ function PaymentCard() {
 
         if (stripeError) {
             // Show error to your customer (e.g., insufficient funds)
+            setdisabled(true)
             alert(stripeError.message);
             return;
         }
         alert(paymentIntent.status)
+        
+
+      
     }
+   
     return (
+       
         <Card>
             <form action="" onSubmit={handleSubmit} >
-                <h3 style={{ textAlign: "center", marginBottom: "30px" }} >VALYKA PAYMENT PORTAL</h3>
+                <h3 style={{ textAlign: "center", marginBottom: "30px" }} >PAYMENT PORTAL</h3>
                 <label style={{ fontWeight: "bold", marginBottom: 2 }} htmlFor="email">Email Address</label>
                 <Input type="email" name="email" id="email" />
                 <br />
@@ -90,11 +105,24 @@ function PaymentCard() {
                 }} >
                     <CardElement o id='card' />
                 </div>
-
-                <Pay disabled={disabled} type="submit">Pay</Pay>
-
+                <LoadingButton
+                    size="small"
+                    endIcon={<SendIcon />}
+                    loading={disabled}
+                    disableElevation
+                    fullWidth
+                    sx={{
+                        marginTop:"17px"
+                    }}
+                    loadingPosition="end"
+                    variant="contained"
+                    type="submit"
+                >
+                    Pay
+                </LoadingButton>
             </form>
         </Card>
+      
     )
 }
 
